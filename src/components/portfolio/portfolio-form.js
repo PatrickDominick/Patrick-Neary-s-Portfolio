@@ -102,7 +102,7 @@ export default class PortfolioForm extends Component {
     handleLogoDrop() {
         return {
             addedfile: file => this.setState({
-                logo_image: file
+                logo: file
             })
         };
     }
@@ -139,8 +139,8 @@ export default class PortfolioForm extends Component {
         formData.append("portfolio_item[banner_image]", this.state.banner_image);
         }
 
-        if (this.state.logo_image) {
-        formData.append("portfolio_item[logo_image]", this.state.logo_image);
+        if (this.state.logo) {
+        formData.append("portfolio_item[logo]", this.state.logo);
         }
 
         return formData;
