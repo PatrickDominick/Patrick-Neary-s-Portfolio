@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faSignOutAlt, faEdit, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import PortfolioContainer from "./portfolio/portfolio-container";
 import NavigationContainer from "./navigation/navigation-container";
@@ -16,35 +14,37 @@ import PortfolioManager from "./pages/portfolio-manager";
 import PortfolioDetail from "./portfolio/portfolio-detail";
 import Auth from "./pages/auth";
 import NoMatch from "./pages/no-match";
+import Icons from "../helpers/icons";
 
-library.add(faTrash, faSignOutAlt, faEdit, faSpinner);
 
 export default class App extends Component {
   constructor(props) {
     super(props);
 
+    Icons();
+
     this.state = {
       loggedInStatus: "NOT_LOGGED_IN"
     }
 
-    this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this)
-    this.handleUnsuccessfulLogin = this.handleUnsuccessfulLogin.bind(this)
-    this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this)
+    this.handleSuccessfulogin = this.handleSuccessfulogin.bind(this)
+    this.handleUnSuccessfulogin = this.handleUnSuccessfulogin.bind(this)
+    this.handleSuccessfulogout = this.handleSuccessfulogout.bind(this)
   }
 
-  handleSuccessfulLogin() {
+  handleSuccessfulogin() {
     this.setState({
       loggedInStatus: "LOGGED_IN"
     })
   }
 
-  handleUnsuccessfulLogin() {
+  handleUnSuccessfulogin() {
     this.setState({
       loggedInStatus: "NOT_LOGGED_IN"
     })
   }
 
-  handleSuccessfulLogout() {
+  handleSuccessfulogout() {
     this.setState({
       loggedInStatus: "NOT_LOGGED_IN"
     })
@@ -99,7 +99,7 @@ export default class App extends Component {
             
             <NavigationContainer 
             loggedInStatus={this.state.loggedInStatus}
-            handleSuccessfulLogout = {this.handleSuccessfulLogout}
+            handleSuccessfulogout = {this.handleSuccessfulogout}
             />
 
             
@@ -112,8 +112,8 @@ export default class App extends Component {
                   props => (
                     <Auth 
                       {...props}
-                      handleSuccessfulLogin = {this.handleSuccessfulLogin}
-                      handleUnsuccessfulLogin = {this.handleUnsuccessfulLogin}
+                      handleSuccessfulogin = {this.handleSuccessfulogin}
+                      handleUnSuccessfulogin = {this.handleUnSuccessfulogin}
                     />
                   )
                 } 
@@ -121,7 +121,13 @@ export default class App extends Component {
 
               <Route path="/about-me" component={About} />
               <Route path="/contact" component={Contact} />
-              <Route path="/blog" component={Blog} />
+
+              <Route path="/blog" 
+                render={props => (
+                  <Blog {...props} loggedInStatus={this.state.loggedInStatus} />
+                )}
+              />
+
               <Route path="/b/:slug" component={BlogDetail} />
               {this.state.loggedInStatus === "LOGGED_IN" ? (this.authorizedPages() ): null}
               <Route exact path="/portfolio/:slug" component={PortfolioDetail} />
